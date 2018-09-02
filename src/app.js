@@ -3,6 +3,7 @@
 // 2 - initialize web3 and contract, pass in contract address as qs and set = to that contract based on qs
 // 3 - send to contract and get past data based on contract
 // 4 - deploy and test on mobile
+// 5 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr
 
 let appRoot = document.getElementById('app')
 
