@@ -5,6 +5,19 @@ let appRoot = document.getElementById('app')
 // TODO figure out which cache it is based on querystring
 // play.ethercache.me?x={addr}
 
+let getWhichEtherCache = () => {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == 'x') {
+            // TODO if x = a, return 'prague'. if x = b, return 'shanghai'
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    console.log('Ethercache addr not found in querystring');
+}
+
 // TODO fetch previous image and note, store them in vars prevImage, prevNote, prevName
 
 let prevImage = 'https://ucarecdn.com/6eb309a7-60bb-46e7-9328-ea43655a314b/c9ca93944a2f77fa0831014202f245de.png'
