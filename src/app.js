@@ -1,3 +1,9 @@
+// @dev next steps:
+// 1 - styling
+// 2 - initialize web3 and contract, pass in contract address as qs and set = to that contract based on qs
+// 3 - send to contract and get past data based on contract
+// 4 - deploy and test on mobile
+
 let appRoot = document.getElementById('app')
 
 // TODO initialize web3
