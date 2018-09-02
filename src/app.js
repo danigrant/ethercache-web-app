@@ -150,8 +150,8 @@ let renderSuccessScreen = () => {
         <h2>Scroll down to read messages from past visitors.</h2>
       </div>
       <div className="content-section">
-        /* TODO - fill in past visitor messages
-         content = new func render feed. Get length of pastmessages array. then loop through and get each value. then format it into the feed. */
+        <!-- TODO - fill in past visitor messages -->
+        <!-- content = new func render feed. Get length of pastmessages array. then loop through and get each value. then format it into the feed. -->
         <div className="feed-item">
           <img src={prevImage} />
           <p className="handwriting">{prevNote}</p>
