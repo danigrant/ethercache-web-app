@@ -230,8 +230,10 @@ let initialPageTemplate = (
 
 ReactDOM.render(initialPageTemplate, appRoot)
 
-document.addEventListener("DOMContentLoaded", function(event) {
+window.addEventListener("load", function(event) {
+
   web3 = initializeWeb3()
+  // console.log(web3.eth.accounts)
 
   currentCache = getWhichEtherCache()
 
