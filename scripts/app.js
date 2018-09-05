@@ -61,9 +61,9 @@ var getWhichEtherCache = function getWhichEtherCache() {
   console.log('Ethercache addr not found in querystring');
 };
 
-var formatDate = function formatDate() {
-  var date = new Date(prevDate);
-  return date.getMonth() + 1 + ' ' + date.getDate() + ', ' + date.getFullYear();
+var formatDate = function formatDate(date) {
+  var d = new Date(date);
+  return d.getMonth() + 1 + ' ' + d.getDate() + ', ' + d.getFullYear();
 };
 
 // show initial page
@@ -194,6 +194,13 @@ var sendToEther = function sendToEther(e) {
   console.log('sent!');
 
   // send to web3 contract then display success screen
+  // TODO this doesn't work
+  var date = new Date();
+  var formattedDate = date.toISOString();
+  ethercacheContract.createLog('name', '2018-09-05T01:36:23.237Z', '[40.69, -73.98]', 'message', 'https://ethercaching.nyc3.digitaloceanspaces.com/jack.png', function (res) {
+    console.log(res);
+  });
+  // ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl)
 
   renderSuccessScreen();
 };
@@ -227,43 +234,43 @@ var renderSuccessScreen = function renderSuccessScreen() {
       React.createElement(
         'div',
         { className: 'feed-item' },
-        React.createElement('img', { src: prevImage }),
+        React.createElement('img', { src: previousLog.image }),
         React.createElement(
           'p',
           { className: 'handwriting' },
-          prevNote
+          previousLog.note
         ),
         React.createElement(
           'p',
           { className: 'handwriting' },
           '- ',
-          prevName
+          previousLog.name
         ),
         React.createElement(
           'p',
           { className: 'handwriting date' },
-          formatDate
+          formatDate(previousLog.date)
         )
       ),
       React.createElement(
         'div',
         { className: 'feed-item' },
-        React.createElement('img', { src: prevImage }),
+        React.createElement('img', { src: previousLog.image }),
         React.createElement(
           'p',
           { className: 'handwriting' },
-          prevNote
+          previousLog.note
         ),
         React.createElement(
           'p',
           { className: 'handwriting' },
           '- ',
-          prevName
+          previousLog.name
         ),
         React.createElement(
           'p',
           { className: 'handwriting date' },
-          formatDate
+          formatDate(previousLog.date)
         )
       )
     )
@@ -312,15 +319,15 @@ var initialPageTemplate = React.createElement(
       null,
       'The person who was here before you left you a note:'
     ),
-    React.createElement('img', { src: previousLog.image }),
+    React.createElement('img', { id: 'previousLogImage', src: previousLog.image }),
     React.createElement(
       'p',
-      { className: 'handwriting' },
+      { id: 'previousLogNote', className: 'handwriting' },
       previousLog.note
     ),
     React.createElement(
       'p',
-      { className: 'handwriting' },
+      { id: 'previousLogName', className: 'handwriting' },
       '-',
       previousLog.name
     ),
@@ -365,5 +372,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   previousLog.note = res[4];
   previousLog.image = res[5];
 
-  ReactDOM.render(initialPageTemplate, appRoot);
+  document.getElementById('previousLogImage').src = previousLog.image;
+  document.getElementById('previousLogNote').innerHTML = previousLog.note;
+  document.getElementById('previousLogName').innerHTML = previousLog.name;
 });

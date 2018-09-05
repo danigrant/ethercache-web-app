@@ -59,9 +59,9 @@ let getWhichEtherCache = () => {
     console.log('Ethercache addr not found in querystring');
 }
 
-let formatDate = () => {
-  let date = new Date(prevDate)
-  return `${date.getMonth() + 1} ${date.getDate()}, ${date.getFullYear()}`
+let formatDate = (date) => {
+  let d = new Date(date)
+  return `${d.getMonth() + 1} ${d.getDate()}, ${d.getFullYear()}`
 }
 
 // show initial page
@@ -164,6 +164,13 @@ let sendToEther = (e) => {
   console.log('sent!')
 
   // send to web3 contract then display success screen
+  // TODO this doesn't work
+  let date = new Date()
+  let formattedDate = date.toISOString()
+  ethercacheContract.createLog('name', '2018-09-05T01:36:23.237Z', '[40.69, -73.98]', 'message', 'https://ethercaching.nyc3.digitaloceanspaces.com/jack.png', function(res) {
+    console.log(res)
+  })
+  // ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl)
 
   renderSuccessScreen()
 }
@@ -180,16 +187,16 @@ let renderSuccessScreen = () => {
 
 
         <div className="feed-item">
-          <img src={prevImage} />
-          <p className="handwriting">{prevNote}</p>
-          <p className="handwriting">- {prevName}</p>
-          <p className="handwriting date">{formatDate}</p>
+          <img src={previousLog.image} />
+          <p className="handwriting">{previousLog.note}</p>
+          <p className="handwriting">- {previousLog.name}</p>
+          <p className="handwriting date">{formatDate(previousLog.date)}</p>
         </div>
         <div className="feed-item">
-          <img src={prevImage} />
-          <p className="handwriting">{prevNote}</p>
-          <p className="handwriting">- {prevName}</p>
-          <p className="handwriting date">{formatDate}</p>
+          <img src={previousLog.image} />
+          <p className="handwriting">{previousLog.note}</p>
+          <p className="handwriting">- {previousLog.name}</p>
+          <p className="handwriting date">{formatDate(previousLog.date)}</p>
         </div>
       </div>
     </div>
@@ -209,9 +216,9 @@ let initialPageTemplate = (
     <div className="content-section">
       <p>Congratulations on finding me.</p>
       <p>The person who was here before you left you a note:</p>
-      <img src={previousLog.image} />
-      <p className="handwriting">{previousLog.note}</p>
-      <p className="handwriting">-{previousLog.name}</p>
+      <img id='previousLogImage' src={previousLog.image} />
+      <p id='previousLogNote' className="handwriting">{previousLog.note}</p>
+      <p id='previousLogName' className="handwriting">-{previousLog.name}</p>
       <p>That’s adorable.</p>
       <p>Now it’s your turn to pay it forward.</p>
       <p>Let’s leave a note from you for the next person who finds me.</p>
@@ -239,6 +246,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   previousLog.note = res[4]
   previousLog.image = res[5]
 
-  ReactDOM.render(initialPageTemplate, appRoot)
+  document.getElementById('previousLogImage').src = previousLog.image
+  document.getElementById('previousLogNote').innerHTML = previousLog.note
+  document.getElementById('previousLogName').innerHTML = previousLog.name
 
 });
