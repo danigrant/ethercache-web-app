@@ -5,11 +5,10 @@
 // 4 - deploy and test on mobile
 // 5 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
 
-let web3
 let ethercacheContractABI
 let ethercacheContract
 let currentCache
-let previousLog = {}
+let previousVisitor = {}
 
 let appRoot = document.getElementById('app')
 
@@ -187,16 +186,16 @@ let renderSuccessScreen = () => {
 
 
         <div className="feed-item">
-          <img src={previousLog.image} />
-          <p className="handwriting">{previousLog.note}</p>
-          <p className="handwriting">- {previousLog.name}</p>
-          <p className="handwriting date">{formatDate(previousLog.date)}</p>
+          <img src={previousVisitor.image} />
+          <p className="handwriting">{previousVisitor.note}</p>
+          <p className="handwriting">- {previousVisitor.name}</p>
+          <p className="handwriting date">{formatDate(previousVisitor.date)}</p>
         </div>
         <div className="feed-item">
-          <img src={previousLog.image} />
-          <p className="handwriting">{previousLog.note}</p>
-          <p className="handwriting">- {previousLog.name}</p>
-          <p className="handwriting date">{formatDate(previousLog.date)}</p>
+          <img src={previousVisitor.image} />
+          <p className="handwriting">{previousVisitor.note}</p>
+          <p className="handwriting">- {previousVisitor.name}</p>
+          <p className="handwriting date">{formatDate(previousVisitor.date)}</p>
         </div>
       </div>
     </div>
@@ -216,9 +215,9 @@ let initialPageTemplate = (
     <div className="content-section">
       <p>Congratulations on finding me.</p>
       <p>The person who was here before you left you a note:</p>
-      <img id='previousLogImage' src={previousLog.image} />
-      <p id='previousLogNote' className="handwriting">{previousLog.note}</p>
-      <p id='previousLogName' className="handwriting">-{previousLog.name}</p>
+      <img id='previousLogImage' src={previousVisitor.image} />
+      <p id='previousLogNote' className="handwriting">{previousVisitor.note}</p>
+      <p id='previousLogName' className="handwriting">-{previousVisitor.name}</p>
       <p>That’s adorable.</p>
       <p>Now it’s your turn to pay it forward.</p>
       <p>Let’s leave a note from you for the next person who finds me.</p>
@@ -228,12 +227,27 @@ let initialPageTemplate = (
   </div>
 )
 
+let getPreviousVisitor = () => {
+  let previousLog = {}
+
+  ethercacheContract.getNumberOfLogEntries(function(err, res) {
+    ethercacheContract.visitorLogs(res - 1, function(err, res) {
+      previousLog.name = res[1]
+      previousLog.date = res[2]
+      previousLog.note = res[4]
+      previousLog.image = res[5]
+    })
+
+  })
+  return previousLog
+}
+
 ReactDOM.render(initialPageTemplate, appRoot)
 
 window.addEventListener("load", function(event) {
 
-  web3 = initializeWeb3()
-  // console.log(web3.eth.accounts)
+  let web3 = initializeWeb3()
+  console.log(web3.eth.accounts)
 
   currentCache = getWhichEtherCache()
 
@@ -241,15 +255,10 @@ window.addEventListener("load", function(event) {
 
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257')
 
-  // get previous note
-  let res = ethercacheContract.visitorLogs(ethercacheContract.getNumberOfLogEntries() - 1)
-  previousLog.name = res[1]
-  previousLog.date = res[2]
-  previousLog.note = res[4]
-  previousLog.image = res[5]
+  let previousVisitor = getPreviousVisitor()
 
-  document.getElementById('previousLogImage').src = previousLog.image
-  document.getElementById('previousLogNote').innerHTML = previousLog.note
-  document.getElementById('previousLogName').innerHTML = previousLog.name
+  document.getElementById('previousLogImage').src = previousVisitor.image
+  document.getElementById('previousLogNote').innerHTML = previousVisitor.note
+  document.getElementById('previousLogName').innerHTML = previousVisitor.name
 
 });

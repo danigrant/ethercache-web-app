@@ -7,11 +7,10 @@
 // 4 - deploy and test on mobile
 // 5 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
 
-var web3 = void 0;
 var ethercacheContractABI = void 0;
 var ethercacheContract = void 0;
 var currentCache = void 0;
-var previousLog = {};
+var previousVisitor = {};
 
 var appRoot = document.getElementById('app');
 
@@ -234,43 +233,43 @@ var renderSuccessScreen = function renderSuccessScreen() {
       React.createElement(
         'div',
         { className: 'feed-item' },
-        React.createElement('img', { src: previousLog.image }),
+        React.createElement('img', { src: previousVisitor.image }),
         React.createElement(
           'p',
           { className: 'handwriting' },
-          previousLog.note
+          previousVisitor.note
         ),
         React.createElement(
           'p',
           { className: 'handwriting' },
           '- ',
-          previousLog.name
+          previousVisitor.name
         ),
         React.createElement(
           'p',
           { className: 'handwriting date' },
-          formatDate(previousLog.date)
+          formatDate(previousVisitor.date)
         )
       ),
       React.createElement(
         'div',
         { className: 'feed-item' },
-        React.createElement('img', { src: previousLog.image }),
+        React.createElement('img', { src: previousVisitor.image }),
         React.createElement(
           'p',
           { className: 'handwriting' },
-          previousLog.note
+          previousVisitor.note
         ),
         React.createElement(
           'p',
           { className: 'handwriting' },
           '- ',
-          previousLog.name
+          previousVisitor.name
         ),
         React.createElement(
           'p',
           { className: 'handwriting date' },
-          formatDate(previousLog.date)
+          formatDate(previousVisitor.date)
         )
       )
     )
@@ -319,17 +318,17 @@ var initialPageTemplate = React.createElement(
       null,
       'The person who was here before you left you a note:'
     ),
-    React.createElement('img', { id: 'previousLogImage', src: previousLog.image }),
+    React.createElement('img', { id: 'previousLogImage', src: previousVisitor.image }),
     React.createElement(
       'p',
       { id: 'previousLogNote', className: 'handwriting' },
-      previousLog.note
+      previousVisitor.note
     ),
     React.createElement(
       'p',
       { id: 'previousLogName', className: 'handwriting' },
       '-',
-      previousLog.name
+      previousVisitor.name
     ),
     React.createElement(
       'p',
@@ -354,12 +353,26 @@ var initialPageTemplate = React.createElement(
   )
 );
 
+var getPreviousVisitor = function getPreviousVisitor() {
+  var previousLog = {};
+
+  ethercacheContract.getNumberOfLogEntries(function (err, res) {
+    ethercacheContract.visitorLogs(res - 1, function (err, res) {
+      previousLog.name = res[1];
+      previousLog.date = res[2];
+      previousLog.note = res[4];
+      previousLog.image = res[5];
+    });
+  });
+  return previousLog;
+};
+
 ReactDOM.render(initialPageTemplate, appRoot);
 
 window.addEventListener("load", function (event) {
 
-  web3 = initializeWeb3();
-  // console.log(web3.eth.accounts)
+  var web3 = initializeWeb3();
+  console.log(web3.eth.accounts);
 
   currentCache = getWhichEtherCache();
 
@@ -367,14 +380,9 @@ window.addEventListener("load", function (event) {
 
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257');
 
-  // get previous note
-  var res = ethercacheContract.visitorLogs(ethercacheContract.getNumberOfLogEntries() - 1);
-  previousLog.name = res[1];
-  previousLog.date = res[2];
-  previousLog.note = res[4];
-  previousLog.image = res[5];
+  var previousVisitor = getPreviousVisitor();
 
-  document.getElementById('previousLogImage').src = previousLog.image;
-  document.getElementById('previousLogNote').innerHTML = previousLog.note;
-  document.getElementById('previousLogName').innerHTML = previousLog.name;
+  document.getElementById('previousLogImage').src = previousVisitor.image;
+  document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
+  document.getElementById('previousLogName').innerHTML = previousVisitor.name;
 });
