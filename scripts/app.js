@@ -5,10 +5,36 @@
 // 2 - initialize web3 and contract, pass in contract address as qs and set = to that contract based on qs
 // 3 - send to contract and get past data based on contract
 // 4 - deploy and test on mobile
+// 5 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
+
+var web3 = void 0;
+var ethercacheContractABI = void 0;
+var ethercacheContract = void 0;
+var currentCache = void 0;
+var previousLog = {};
 
 var appRoot = document.getElementById('app');
 
-// TODO initialize web3
+var initializeWeb3 = function initializeWeb3() {
+
+  if (typeof web3 !== 'undefined') {
+    // Use the browser's ethereum provider
+    var provider = web3.currentProvider;
+    return web3;
+  } else {
+    return new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io"));
+  }
+};
+
+var userHasEthBrowser = function userHasEthBrowser() {
+  if (web3.eth.accounts[0] === undefined) {
+    // user does not have a web3 account
+    // will need to render a ui to go tell them to download cipher
+    return false;
+  } else {
+    return true;
+  }
+};
 
 // TODO figure out which cache it is based on querystring
 // play.ethercache.me?x={addr}
@@ -19,19 +45,21 @@ var getWhichEtherCache = function getWhichEtherCache() {
   for (var i = 0; i < vars.length; i++) {
     var pair = vars[i].split('=');
     if (decodeURIComponent(pair[0]) == 'x') {
-      // TODO if x = a, return 'prague'. if x = b, return 'shanghai'
-      return decodeURIComponent(pair[1]);
+      // TODO if x = a, return obj currentCache.addr, currentCache.name
+      var _currentCache = {};
+
+      // test cache
+      if (decodeURIComponent(pair[1]) === '0xc1297d9bda529c5e02685a2a3862ce9b82fc5257') {
+        _currentCache.address = '0xc1297d9bda529c5e02685a2a3862ce9b82fc5257';
+        _currentCache.name = 'test';
+        return _currentCache;
+      } else {
+        return;
+      }
     }
   }
   console.log('Ethercache addr not found in querystring');
 };
-
-// TODO fetch previous image and note, store them in vars prevImage, prevNote, prevName
-
-var prevImage = 'https://ucarecdn.com/6eb309a7-60bb-46e7-9328-ea43655a314b/c9ca93944a2f77fa0831014202f245de.png';
-var prevNote = 'This is fun! Hope you have as much fun as I did.';
-var prevName = 'dani';
-var prevDate = '2018-08-13T03:24:00';
 
 var formatDate = function formatDate() {
   var date = new Date(prevDate);
@@ -196,7 +224,6 @@ var renderSuccessScreen = function renderSuccessScreen() {
     React.createElement(
       'div',
       { className: 'content-section' },
-      '/* TODO - fill in past visitor messages content = new func render feed. Get length of pastmessages array. then loop through and get each value. then format it into the feed. */',
       React.createElement(
         'div',
         { className: 'feed-item' },
@@ -274,7 +301,7 @@ var initialPageTemplate = React.createElement(
   ),
   React.createElement(
     'div',
-    { id: 'content-section' },
+    { className: 'content-section' },
     React.createElement(
       'p',
       null,
@@ -285,17 +312,17 @@ var initialPageTemplate = React.createElement(
       null,
       'The person who was here before you left you a note:'
     ),
-    React.createElement('img', { src: prevImage }),
+    React.createElement('img', { src: previousLog.image }),
     React.createElement(
       'p',
       { className: 'handwriting' },
-      prevNote
+      previousLog.note
     ),
     React.createElement(
       'p',
       { className: 'handwriting' },
       '-',
-      prevName
+      previousLog.name
     ),
     React.createElement(
       'p',
@@ -321,3 +348,22 @@ var initialPageTemplate = React.createElement(
 );
 
 ReactDOM.render(initialPageTemplate, appRoot);
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  web3 = initializeWeb3();
+
+  currentCache = getWhichEtherCache();
+
+  ethercacheContractABI = web3.eth.contract([{ "constant": false, "inputs": [], "name": "setFirstLogEntry", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_name", "type": "string" }, { "name": "_dateTime", "type": "string" }, { "name": "_location", "type": "string" }, { "name": "_note", "type": "string" }, { "name": "_imageUrl", "type": "string" }], "name": "createLog", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "uint256" }], "name": "visitorLogs", "outputs": [{ "name": "visitor", "type": "address" }, { "name": "name", "type": "string" }, { "name": "dateTime", "type": "string" }, { "name": "location", "type": "string" }, { "name": "note", "type": "string" }, { "name": "imageUrl", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getNumberOfLogEntries", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }]);
+
+  ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257');
+
+  // get previous note
+  var res = ethercacheContract.visitorLogs(ethercacheContract.getNumberOfLogEntries() - 1);
+  previousLog.name = res[1];
+  previousLog.date = res[2];
+  previousLog.note = res[4];
+  previousLog.image = res[5];
+
+  ReactDOM.render(initialPageTemplate, appRoot);
+});
