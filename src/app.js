@@ -166,10 +166,10 @@ let sendToEther = (e) => {
   // TODO this doesn't work
   let date = new Date()
   let formattedDate = date.toISOString()
-  ethercacheContract.createLog('name', '2018-09-05T01:36:23.237Z', '[40.69, -73.98]', 'message', 'https://ethercaching.nyc3.digitaloceanspaces.com/jack.png', function(res) {
-    console.log(res)
+
+  ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl, function() {
+    console.log('sent!')
   })
-  // ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl)
 
   renderSuccessScreen()
 }
@@ -184,7 +184,7 @@ let renderSuccessScreen = () => {
       </div>
       <div className="content-section">
 
-
+      {console.log(previousVisitor)}
         <div className="feed-item">
           <img src={previousVisitor.image} />
           <p className="handwriting">{previousVisitor.note}</p>
@@ -215,7 +215,7 @@ let initialPageTemplate = (
     <div className="content-section">
       <p>Congratulations on finding me.</p>
       <p>The person who was here before you left you a note:</p>
-      <img id='previousLogImage' src={previousVisitor.image} />
+      <img id='previousLogImage' src='{previousVisitor.image}' />
       <p id='previousLogNote' className="handwriting">{previousVisitor.note}</p>
       <p id='previousLogName' className="handwriting">-{previousVisitor.name}</p>
       <p>That’s adorable.</p>
@@ -255,7 +255,8 @@ window.addEventListener("load", function(event) {
 
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257')
 
-  let previousVisitor = getPreviousVisitor()
+  previousVisitor = getPreviousVisitor()
+  console.log(previousVisitor)
 
   document.getElementById('previousLogImage').src = previousVisitor.image
   document.getElementById('previousLogNote').innerHTML = previousVisitor.note

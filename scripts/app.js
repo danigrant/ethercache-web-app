@@ -196,10 +196,10 @@ var sendToEther = function sendToEther(e) {
   // TODO this doesn't work
   var date = new Date();
   var formattedDate = date.toISOString();
-  ethercacheContract.createLog('name', '2018-09-05T01:36:23.237Z', '[40.69, -73.98]', 'message', 'https://ethercaching.nyc3.digitaloceanspaces.com/jack.png', function (res) {
-    console.log(res);
+
+  ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl, function () {
+    console.log('sent!');
   });
-  // ethercacheContract.createLog(currentVisitor.name, formattedDate, '', currentVisitor.message, currentVisitor.imageUrl)
 
   renderSuccessScreen();
 };
@@ -230,6 +230,7 @@ var renderSuccessScreen = function renderSuccessScreen() {
     React.createElement(
       'div',
       { className: 'content-section' },
+      console.log(previousVisitor),
       React.createElement(
         'div',
         { className: 'feed-item' },
@@ -318,7 +319,7 @@ var initialPageTemplate = React.createElement(
       null,
       'The person who was here before you left you a note:'
     ),
-    React.createElement('img', { id: 'previousLogImage', src: previousVisitor.image }),
+    React.createElement('img', { id: 'previousLogImage', src: '{previousVisitor.image}' }),
     React.createElement(
       'p',
       { id: 'previousLogNote', className: 'handwriting' },
@@ -380,7 +381,8 @@ window.addEventListener("load", function (event) {
 
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257');
 
-  var previousVisitor = getPreviousVisitor();
+  previousVisitor = getPreviousVisitor();
+  console.log(previousVisitor);
 
   document.getElementById('previousLogImage').src = previousVisitor.image;
   document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
