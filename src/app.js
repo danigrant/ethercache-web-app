@@ -118,7 +118,7 @@ let renderStepThree = () => {
   let stepThreeTemplate = (
     <div className="form-section">
       <form onSubmit={photoFormSubmit}>
-        <label>This is the last step. Let’s take a picture to commemorate the moment.</label>
+        <label>This is the last step. Let’s take a picture to capture the moment.</label>
         <input type="hidden" role="uploadcare-uploader" name="content" data-crop="1:1" data-images-only="true" />
       </form>
     </div>
