@@ -137,4 +137,5 @@ a {
 
 input, textarea {
   font-size: initial;
+  text-indent: 0;
 }
