@@ -122,6 +122,10 @@ a {
   text-align: left;
 }
 
+.success-section img {
+  width: 250px;
+}
+
 .success-section .title-section {
   padding: 2em;
   text-align: left;

@@ -179,6 +179,7 @@ let renderSuccessScreen = () => {
   let successTemplate = (
     <div className="success-section">
       <div className="title-section">
+        <img src="https://ethercaching.nyc3.digitaloceanspaces.com/star.png" />
         <h1>You’re done!</h1>
         <h1>You’ve left your mark on history.</h1>
         <h2>Scroll down to read messages from past visitors.</h2>

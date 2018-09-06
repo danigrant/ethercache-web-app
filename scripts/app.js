@@ -5,7 +5,7 @@
 // 2 - actually get past logs and display
 // 3 - if no wallet, say something
 // 4 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
-// 5 - location checking 
+// 5 - location checking
 
 var ethercacheContractABI = void 0;
 var ethercacheContract = void 0;
@@ -113,7 +113,7 @@ var renderStepTwo = function renderStepTwo(e) {
         null,
         'Now let\u2019s write a little letter to whomever finds me next.'
       ),
-      React.createElement('input', { type: 'text', name: 'messagefield', autoFocus: true, required: true, placeholder: 'i am so happy to share my day with you' })
+      React.createElement('input', { type: 'text', name: 'messagefield', autoFocus: true, required: true, placeholder: 'dear stranger...' })
     )
   );
 
@@ -138,7 +138,7 @@ var renderStepThree = function renderStepThree() {
       React.createElement(
         'label',
         null,
-        'This is the last step. Let\u2019s take a picture to commemorate the moment.'
+        'This is the last step. Let\u2019s take a picture to capture the moment.'
       ),
       React.createElement('input', { type: 'hidden', role: 'uploadcare-uploader', name: 'content', 'data-crop': '1:1', 'data-images-only': 'true' })
     )
@@ -212,6 +212,7 @@ var renderSuccessScreen = function renderSuccessScreen() {
     React.createElement(
       'div',
       { className: 'title-section' },
+      React.createElement('img', { src: 'https://ethercaching.nyc3.digitaloceanspaces.com/star.png' }),
       React.createElement(
         'h1',
         null,
@@ -328,7 +329,7 @@ var initialPageTemplate = React.createElement(
     React.createElement(
       'p',
       { id: 'previousLogName', className: 'handwriting' },
-      '-',
+      '\u2013\u2013 ',
       previousVisitor.name
     ),
     React.createElement(
@@ -392,6 +393,6 @@ window.addEventListener("load", function (event) {
 
     document.getElementById('previousLogImage').src = previousVisitor.image;
     document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
-    document.getElementById('previousLogName').innerHTML = previousVisitor.name;
+    document.getElementById('previousLogName').innerHTML = '\u2013\u2013 ' + previousVisitor.name;
   }, 1000);
 });
