@@ -71,7 +71,7 @@ a {
 
 .title-section img {
   width: 250px;
-  padding-top: 7em;
+  padding-top: 5.5em;
 }
 
 .title-section h1 {
@@ -133,4 +133,8 @@ a {
 
 .success-section .title-section > h1:nth-child(1) {
   margin-top: 5em;
+}
+
+input, textarea {
+  font-size: initial;
 }
