@@ -387,9 +387,11 @@ window.addEventListener("load", function (event) {
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257');
 
   previousVisitor = getPreviousVisitor();
-  console.log('in window.addeventlistener. ' + previousVisitor.name);
 
-  document.getElementById('previousLogImage').src = previousVisitor.image;
-  document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
-  document.getElementById('previousLogName').innerHTML = previousVisitor.name;
+  setTimeout(function () {
+
+    document.getElementById('previousLogImage').src = previousVisitor.image;
+    document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
+    document.getElementById('previousLogName').innerHTML = previousVisitor.name;
+  }, 1000);
 });
