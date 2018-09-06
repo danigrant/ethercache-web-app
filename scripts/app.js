@@ -2,10 +2,10 @@
 
 // @dev next steps:
 // 1 - styling
-// 2 - initialize web3 and contract, pass in contract address as qs and set = to that contract based on qs
-// 3 - send to contract and get past data based on contract
-// 4 - deploy and test on mobile
-// 5 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
+// 2 - actually get past logs and display
+// 3 - if no wallet, say something
+// 4 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
+// 5 - location checking 
 
 var ethercacheContractABI = void 0;
 var ethercacheContract = void 0;
