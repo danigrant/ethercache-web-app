@@ -175,6 +175,7 @@ let sendToEther = (e) => {
 }
 
 let renderSuccessScreen = () => {
+
   let successTemplate = (
     <div className="success-section">
       <div className="title-section">
@@ -183,8 +184,6 @@ let renderSuccessScreen = () => {
         <h2>Scroll down to read messages from past visitors.</h2>
       </div>
       <div className="content-section">
-
-      {console.log(previousVisitor)}
         <div className="feed-item">
           <img src={previousVisitor.image} />
           <p className="handwriting">{previousVisitor.note}</p>
@@ -228,18 +227,22 @@ let initialPageTemplate = (
 )
 
 let getPreviousVisitor = () => {
-  let previousLog = {}
+  let previous = {}
 
   ethercacheContract.getNumberOfLogEntries(function(err, res) {
     ethercacheContract.visitorLogs(res - 1, function(err, res) {
-      previousLog.name = res[1]
-      previousLog.date = res[2]
-      previousLog.note = res[4]
-      previousLog.image = res[5]
+      previous.name = res[1]
+      previous.date = res[2]
+      previous.note = res[4]
+      previous.image = res[5]
+      console.log(`1. in getPreviousVisitor, previous is ${previous.name}`)
+      return previous
     })
-
+    console.log(`2. in getPreviousVisitor, previous is ${previous.name}`)
+    return previous
   })
-  return previousLog
+  console.log(`3. in getPreviousVisitor, previous is ${previous.name}`)
+  return previous
 }
 
 ReactDOM.render(initialPageTemplate, appRoot)
@@ -256,7 +259,7 @@ window.addEventListener("load", function(event) {
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257')
 
   previousVisitor = getPreviousVisitor()
-  console.log(previousVisitor)
+  console.log(`in window.addeventlistener. ${previousVisitor.name}`)
 
   document.getElementById('previousLogImage').src = previousVisitor.image
   document.getElementById('previousLogNote').innerHTML = previousVisitor.note

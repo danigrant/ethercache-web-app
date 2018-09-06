@@ -205,6 +205,7 @@ var sendToEther = function sendToEther(e) {
 };
 
 var renderSuccessScreen = function renderSuccessScreen() {
+
   var successTemplate = React.createElement(
     'div',
     { className: 'success-section' },
@@ -230,7 +231,6 @@ var renderSuccessScreen = function renderSuccessScreen() {
     React.createElement(
       'div',
       { className: 'content-section' },
-      console.log(previousVisitor),
       React.createElement(
         'div',
         { className: 'feed-item' },
@@ -355,17 +355,22 @@ var initialPageTemplate = React.createElement(
 );
 
 var getPreviousVisitor = function getPreviousVisitor() {
-  var previousLog = {};
+  var previous = {};
 
   ethercacheContract.getNumberOfLogEntries(function (err, res) {
     ethercacheContract.visitorLogs(res - 1, function (err, res) {
-      previousLog.name = res[1];
-      previousLog.date = res[2];
-      previousLog.note = res[4];
-      previousLog.image = res[5];
+      previous.name = res[1];
+      previous.date = res[2];
+      previous.note = res[4];
+      previous.image = res[5];
+      console.log('1. in getPreviousVisitor, previous is ' + previous.name);
+      return previous;
     });
+    console.log('2. in getPreviousVisitor, previous is ' + previous.name);
+    return previous;
   });
-  return previousLog;
+  console.log('3. in getPreviousVisitor, previous is ' + previous.name);
+  return previous;
 };
 
 ReactDOM.render(initialPageTemplate, appRoot);
@@ -382,7 +387,7 @@ window.addEventListener("load", function (event) {
   ethercacheContract = ethercacheContractABI.at('0xc1297d9bda529c5e02685a2a3862ce9b82fc5257');
 
   previousVisitor = getPreviousVisitor();
-  console.log(previousVisitor);
+  console.log('in window.addeventlistener. ' + previousVisitor.name);
 
   document.getElementById('previousLogImage').src = previousVisitor.image;
   document.getElementById('previousLogNote').innerHTML = previousVisitor.note;
