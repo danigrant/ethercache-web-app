@@ -91,6 +91,7 @@ a {
 .form-section label {
   font-weight: bold;
   font-size: 4em;
+  overflow-wrap: break-word;
 }
 
 .form-section input {
@@ -102,8 +103,9 @@ a {
   color: #717171;
 }
 
-.form-section input:placeholder {
+::-webkit-input-placeholder, ::-moz-placeholder, :-ms-input-placeholder, :-moz-placeholder {
   overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .uploadcare--widget {

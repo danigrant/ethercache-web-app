@@ -98,7 +98,7 @@ let renderStepTwo = (e) => {
     <div className="form-section">
       <form onSubmit={messageFormSubmit}>
         <label>Now let’s write a little letter to whomever finds me next.</label>
-        <input type="text" name="messagefield" autoFocus required placeholder="i am so happy to share my day with you" />
+        <input type="text" name="messagefield" autoFocus required placeholder="dear stranger..." />
       </form>
     </div>
   )
