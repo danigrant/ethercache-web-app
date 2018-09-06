@@ -5,17 +5,39 @@ body {
 
 .handwriting {
   font-family: 'Reenie Beanie', cursive;
+  font-size: 1.5em;
 }
 
-.feed-item img {
+button {
+  display: block;
+  padding: 1em;
+  margin-top: 1em;
+  background-color: #b6c1ff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  border-bottom: 3px solid #7f88bb;
+  color: white;
+  font-size: 0.8em;
+}
+
+button:hover {
+  color: #97a1dc;
+}
+
+button:active {
+  color: #868cb5;
+}
+
+#previousLogImage {
   width: 250px;
   display: block;
   margin: 0 auto;
+  margin-top: 40px;
 }
 
-.feed-item p {
+#previousLogNote, #previousLogName {
   text-align: center;
-
 }
 
 .date {
@@ -60,4 +82,53 @@ a {
 .content-section {
   background-color: white;
   padding: 3em;
+}
+
+.form-section {
+  padding: 2em;
+}
+
+.form-section label {
+  font-weight: bold;
+  font-size: 4em;
+}
+
+.form-section input {
+  display: block;
+  font-size: 3em;
+  cursor: auto;
+  outline: none;
+  border: none;
+  color: #717171;
+}
+
+.form-section input:placeholder {
+  overflow-wrap: break-word;
+}
+
+.uploadcare--widget {
+  margin-top: 1em;
+}
+
+.uploadcare--widget button {
+  padding: 1em;
+}
+
+.success-section {
+  padding: 0;
+  margin-top: -35px;
+  text-align: left;
+}
+
+.success-section .title-section {
+  padding: 2em;
+  text-align: left;
+}
+
+.success-section .title-section h1 {
+  padding: 0;
+}
+
+.success-section .title-section > h1:nth-child(1) {
+  margin-top: 5em;
 }

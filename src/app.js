@@ -3,7 +3,7 @@
 // 2 - actually get past logs and display
 // 3 - if no wallet, say something
 // 4 - setup forwarding in cf. ethercache.me/1 => play.ethercache.me?x=addr. the fake qr needs to forqard to the nice-try page
-// 5 - location checking 
+// 5 - location checking
 
 let ethercacheContractABI
 let ethercacheContract
@@ -216,7 +216,7 @@ let initialPageTemplate = (
       <p>The person who was here before you left you a note:</p>
       <img id='previousLogImage' src='{previousVisitor.image}' />
       <p id='previousLogNote' className="handwriting">{previousVisitor.note}</p>
-      <p id='previousLogName' className="handwriting">-{previousVisitor.name}</p>
+      <p id='previousLogName' className="handwriting">–– {previousVisitor.name}</p>
       <p>That’s adorable.</p>
       <p>Now it’s your turn to pay it forward.</p>
       <p>Let’s leave a note from you for the next person who finds me.</p>
@@ -264,7 +264,7 @@ window.addEventListener("load", function(event) {
 
     document.getElementById('previousLogImage').src = previousVisitor.image
     document.getElementById('previousLogNote').innerHTML = previousVisitor.note
-    document.getElementById('previousLogName').innerHTML = previousVisitor.name
+    document.getElementById('previousLogName').innerHTML = `–– ${previousVisitor.name}`
 
   }, 1000)
 
